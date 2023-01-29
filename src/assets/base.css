@@ -1,0 +1,32 @@
+/* //@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500&display=swap'); manrope */
+
+/* Figtree */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&display=swap');
+/* Plus Jakarta Sans */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap');
+
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+
+}
+
+body {
+  transition: color 0.5s, background-color 0.5s;
+  line-height: 1.4;
+  color: #121D33;
+  font-family: 'Figtree', sans-serif;
+  font-size: 14px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+}
+
+p {
+  color: #727272;
+}
