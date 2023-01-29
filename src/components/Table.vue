@@ -111,7 +111,7 @@
     </div>
     <div class="cta-modal-btns">
       <button @click="ignoreDelete" class="action-btn-cancel">Cancel</button>
-      <button @click="$emit('delete', [...checkedIds])" class="action-btn-delete">Delete selected</button>
+      <button @click="$emit('delete', [...checkedIds]), ignoreDelete()" class="action-btn-delete">Delete selected</button>
     </div>
   </div>
   </Transition>
