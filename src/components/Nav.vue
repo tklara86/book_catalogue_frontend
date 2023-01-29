@@ -15,7 +15,10 @@
     </div>
     <div class="linkClass">
       <RouterLink to="/"><vue-feather class="navigation--icon" type="home"></vue-feather>Home</RouterLink>
-      <a href="#" @click="showHideSubLinks"><vue-feather class="navigation--icon" type="edit"></vue-feather>Catalog<vue-feather class="navigation--icon open" :type="showLink ? 'chevron-down' : 'chevron-right'"></vue-feather></a>
+      <a href="#" class="subLinkClass" @click="showHideSubLinks">
+        <span><vue-feather class="navigation--icon" type="edit"></vue-feather>Catalog</span>
+        <span><vue-feather class="navigation--icon open" :type="showLink ? 'minus' : 'plus'"></vue-feather></span>
+      </a>
         <div>
           <RouterLink class="sub-link" v-if="showLink" to="/books"><vue-feather class="navigation--icon sub-icon" type="book"></vue-feather>Books</RouterLink>
           <RouterLink class="sub-link" v-if="showLink" to="/authors"><vue-feather class="navigation--icon sub-icon" type="users"></vue-feather>Authors</RouterLink>
@@ -38,11 +41,25 @@
     height: 100vh;
     background: #f7f7f7;
     border-right: 1px solid #eee;
+    min-width: 200px
   }
 
   .linkClass  a {
     display: flex;
     align-items: center;
+  }
+
+  .linkClass  a span {
+    display: flex;
+    align-items: center;
+  }
+
+  .subLinkClass {
+    justify-content: space-between;
+  }
+
+  .subLinkClass span .navigation--icon.open {
+    margin-right: 0;
   }
 
   .logoClass img {

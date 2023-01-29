@@ -867,4 +867,9 @@ tr {
   border: none;
 }
 
+.action-btn-cancel:hover {
+  transition: all .3s ease;
+  background-color: #e1e1e1;
+}
+
 /*  #1b43ca */
