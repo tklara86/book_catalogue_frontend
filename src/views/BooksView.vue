@@ -3,6 +3,7 @@
   import { useBookStore } from '../stores/book.js'
   import { storeToRefs } from 'pinia';
   import { onClickOutside } from '@vueuse/core';
+  import { vOnClickOutside } from '@vueuse/components'
   // Components
   import Spinner from '../components/Spinner.vue';
   import MainHeader from '../components/MainHeader.vue';
@@ -28,11 +29,23 @@
   const loadingTable = ref(true)
   const statusValue = ref("Select status");
   const selected = ref(false)
+  let b = ref(null)
+  let isOpenSelect = ref(null)
 
   const runUpdate = ref(false)
   const ctaButton = ref('');
 
   const bookId = ref(null)
+
+  const filterCategories = ref([])
+
+  let categoryNames = ref([])
+
+  const dropdown = ref(false)
+
+
+
+
 
 
   let authors = [];
@@ -40,14 +53,23 @@
   let bookAuthorIds = {};
   let bookCategoryIds = {};
 
-
-
   onClickOutside(modal, () => (isModalOpen.value = false, runUpdate.value = false))
 
+
+  const dropdownHandler = () => {
+    dropdown.value = false
+  }
+  
   // onMounted
   onMounted(async() => {
+
+    const filters = {
+      //authors: [57],
+    //  categories: [23,45],
+      status_id: ''
+    }
     
-    await fetch('http://localhost:4000/v1/books')
+    await fetch('http://localhost:4000/v1/books?' + new URLSearchParams(filters))
     .then(response => response.json())
     .then(data => {
 
@@ -58,17 +80,19 @@
       for (const [_, value] of Object.entries(results)) {
         bookCategoryIds[value.id] = value.categories
         bookAuthorIds[value.id] = value.authors;
-      }    
+      }   
+      
+      // b.value = data.results.length;
 
-    
+      // console.log(b.value)
+
 
       if (books.value) {
         loadingTable.value = false
       }
     });
-
-    // get categories
-    await fetch('http://localhost:4000/v1/categories')
+    // get cartegories
+    fetch('http://localhost:4000/v1/categories')
       .then(response => response.json())
       .then(data => {
         categories = data.results
@@ -97,10 +121,35 @@
       }
   })
 
+  watch(filterCategories, () => {
+    let filteredName = filterCategories.value
+    const regex = new RegExp(filteredName, "gi");
+    let catUpd = []
+    for (var j  = 0; j < categories.length; j++) {
+      let id = 'category_' + categories[j].id
+      if (categories[j].name.match(regex)) {
+       
+        let labelId = document.querySelector(`label#${id}`)
+        labelId.style.display = 'flex';
+      
+      } else {
+        let labelId = document.querySelector(`label#${id}`)
+        labelId.style.display = 'none';
+      }
+    }
+
+   
+  })
 
 
 
-  
+
+  const showSelectedCat = (e) => {
+    const option = e.target.nextElementSibling
+     option.classList.toggle('show');
+  }
+
+
   const handleSubmit = () => {
 
     let authorIds = [];
@@ -136,7 +185,13 @@
     const option = e.target.parentNode;
     option.classList.toggle('show');
 
+    
   }
+
+  const getCatName = (e) => {
+    console.log(e.target)
+  }
+
   const getStatus = (e) => {
     const selectedOption = e.target.closest('li');
     const select = document.querySelector('.select');
@@ -194,7 +249,8 @@
     loading: loadingTable
   }
 
-  
+
+
   const deleteBook = (ids) => {
     const data = { ids }
    fetch(`http://localhost:4000/v1/books`, {
@@ -234,6 +290,30 @@
       checkedCategory.value = bookCategoryIds[bookId.value]
       checkedAuthors.value = bookAuthorIds[bookId.value]
     }
+  })
+
+
+  watch(checkedCategory, () => {
+    for (var i = 0; i < categories.length; i++) {
+      // add
+      if (checkedCategory.value.includes(categories[i].id)) {
+        if (!categoryNames.value.includes(categories[i].name)) {
+          categoryNames.value.push(categories[i].name)
+        }
+      } 
+      // remove
+      if (!checkedCategory.value.includes(categories[i].id)) {
+        if (categoryNames.value.includes(categories[i].name)) {
+          categoryNames.value.splice(categoryNames.value.indexOf(categories[i].name), 1)
+        }
+      } 
+    }
+
+ 
+
+    // for (var j = 0; j < categoryNames.value.length; j++ ) {
+    //   console.log(categoryNames.value[j])
+    // }
   })
 
 
@@ -281,7 +361,7 @@
                     <label class="form-label" for="title">Title</label>
                     <input v-model="bookCredentials.title" class="input-control input-control--small" type="text" name="title" placeholder="Title">
 
-                    <label class="form-label" for="status">Status</label>
+                  <label class="form-label" for="status">Status</label>
                     <div class="select mt-0 mb-0">
                       <div @click="handleSelect" :class="selected ? 'custom-select selected' : 'custom-select'">
                           <span :model="statusValue" class="value">{{statusValue}}</span>
@@ -298,33 +378,34 @@
 
                     <label class="form-label" for="status">Authors</label>
                     <div class="select mt-0 mb-0">
-                      <div @click="handleSelect" :class="selected ? 'custom-select selected' : 'custom-select'">
+                      <div :class="selected ? 'custom-select selected' : 'custom-select'">
                           <span :model="statusValue" class="value">{{statusValue}}</span>
                           <vue-feather class="icon dropdown-icon" type="chevron-down"></vue-feather>
                       </div>
-                      <div class="option">
+                     <div class="option">
                         <div class="checkbox-container">
-                        <div v-if="authors">
-                          <div v-for="author in authors" :key="author.id">
-                            <input class="checkbox-input" :id="author.id" type="checkbox" :value="author.id" v-model="checkedAuthors" />
-                            <label class="checkbox" :for="author.id">
-                              <span>
-                                <svg width="12px" height="10px">
-                                  <use xlink:href="#check"></use>
-                                </svg>
-                              </span>
-                              <span>{{author.author_name}}</span>
-                            </label>
+                          <div v-if="authors">
+                            <div v-for="author in authors" :key="'author_' + author.id">
+                              <input class="checkbox-input" :id="'author_' + author.id" type="checkbox" :value="author.id" v-model="checkedAuthors" />
+                              <label class="checkbox" :for="'author_' + author.id">
+                                <span>
+                                  <svg width="12px" height="10px">
+                                    <use xlink:href="#check"></use>
+                                  </svg>
+                                </span>
+                                <span>{{author.author_name}}</span>
+                              </label>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
 
                       </div>
                     </div>
 
-
-                    <label class="form-label" for="status">Categories</label>
+     
+                   
+                 <!--  <label class="form-label" for="status">Categories</label>
                     <div class="select mt-0 mb-0">
                       <div @click="handleSelect" :class="selected ? 'custom-select selected' : 'custom-select'">
                           <span :model="statusValue" class="value">{{statusValue}}</span>
@@ -332,25 +413,65 @@
                       </div>
                       <div class="option">
                         <div class="checkbox-container">
-                        <div v-if="categories">
-                          <div v-for="category in categories" :key="category.id">
-                            <input class="checkbox-input" :id="category.id" type="checkbox" :value="category.id"  v-model="checkedCategory"  />
-                            <label class="checkbox" :for="category.id">
-                              <span>
-                                <svg width="12px" height="10px">
-                                  <use xlink:href="#check"></use>
-                                </svg>
-                              </span>
-                              <span>{{category.name}}</span>
-                            </label>
+                          <div v-if="categories">
+                            <div  v-for="category in categories" :key="'category_' + category.id">
+                              <input  class="checkbox-input" :id="'category_' + category.id" type="checkbox" :value="category.id" v-model="checkedCategory"  />
+                              <label class="checkbox" :for="'category_' + category.id">
+                                <span>
+                                  <svg width="12px" height="10px">
+                                    <use xlink:href="#check"></use>
+                                  </svg>
+                                </span>
+                                <span>{{category.name}}</span>
+                              </label>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
 
                       </div>
+                    </div>--> 
+                    {{checkedCategory}}
+                    {{categoryNames}}
+                    <label class="form-label" for="categories2">Categories2</label>
+                    
+                    <div class="multiple-select-wrapper">
+                      <div class="multiple-select-inner">
+                        <template v-for="categoryName in categoryNames">
+                            <span class="tag-item">{{categoryName}}<vue-feather class="icon dropdown-icon" type="x"></vue-feather></span>
+                        </template>
+                       
+                        <input @click="dropdown = !dropdown" v-model="filterCategories" class="input-control input-control--small" type="text" name="categories2" placeholder="Categories2">
+                        <div  v-on-click-outside="dropdownHandler" :class="dropdown ? 'option show' : 'option'">
+                          <div class="checkbox-container">
+                            <div v-if="categories">
+                              <div v-for="category in categories" :key="'category_' + category.id">
+                            
+                              <input :data-category-name="category.name" :class="checkedCategory.includes(category.id) ? 'checkbox-input selected' : 'checkbox-input'" :id="'category_' + category.id" type="checkbox" :value="category.id" v-model="checkedCategory"  />
+                                <label :id="'category_' + category.id" class="checkbox" :for="'category_' + category.id">
+                                  <span>
+                                    <svg width="12px" height="10px">
+                                      <use xlink:href="#check"></use>
+                                    </svg>
+                                  </span>
+                                  <span>{{category.name}}</span>
+                                </label>
+                      
+                              
+                              </div>
+                            </div>
+                          </div>
+
+
+                        </div>
+                      
+                      </div>            
+         
                     </div>
 
+
+                   
+      
 
 
 
@@ -505,10 +626,7 @@
   animation: zoom-in-out 0.3s ease;
 }
 
-.checkbox-input:checked + .checkbox {
-  border: 1px solid #7d3dca;
-  background: #f1e8ff;
-}
+
 
 .checkbox-input:checked + .checkbox span:first-child svg {
   stroke-dashoffset: 0;

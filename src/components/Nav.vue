@@ -19,11 +19,13 @@
         <span><vue-feather class="navigation--icon" type="edit"></vue-feather>Catalog</span>
         <span><vue-feather class="navigation--icon open" :type="showLink ? 'minus' : 'plus'"></vue-feather></span>
       </a>
-        <div>
-          <RouterLink class="sub-link" v-if="showLink" to="/books"><vue-feather class="navigation--icon sub-icon" type="book"></vue-feather>Books</RouterLink>
-          <RouterLink class="sub-link" v-if="showLink" to="/authors"><vue-feather class="navigation--icon sub-icon" type="users"></vue-feather>Authors</RouterLink>
-          <RouterLink class="sub-link" v-if="showLink" to="/categories"><vue-feather class="navigation--icon sub-icon" type="list"></vue-feather>Categories</RouterLink>
-        </div>
+        <Transition name="sublinks">
+          <div>
+            <RouterLink class="sub-link" v-if="showLink" to="/books"><vue-feather class="navigation--icon sub-icon" type="book"></vue-feather>Books</RouterLink>
+            <RouterLink class="sub-link" v-if="showLink" to="/authors"><vue-feather class="navigation--icon sub-icon" type="users"></vue-feather>Authors</RouterLink>
+            <RouterLink class="sub-link" v-if="showLink" to="/categories"><vue-feather class="navigation--icon sub-icon" type="list"></vue-feather>Categories</RouterLink>
+          </div>
+        </Transition>
       <RouterLink to="/settings"><vue-feather class="navigation--icon" type="sliders">Settings</vue-feather>Settings</RouterLink>
     </div>
   </div>
@@ -38,7 +40,7 @@
   .nav-container {
 
     padding: 20px;
-    height: 100vh;
+
     background: #f7f7f7;
     border-right: 1px solid #eee;
     min-width: 200px
@@ -113,16 +115,6 @@
     margin-top: 50px;
   }
 
-  .sublinks-enter-active,
-.sublinks-leave-active {
-  transition: all 0.25s ease;
-}
-
-.sub-links-enter-from,
-.sub-links-leave-to {
-  opacity: 0;
- transform: translateX(10px)
-}
 
 .navigation--icon.open {
   width: 16px;

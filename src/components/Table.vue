@@ -56,7 +56,7 @@
         </th>
         <th v-for="(tHeading, index) in props.tableStructure.tHeadings" :key="index">{{tHeading.name}}</th>
       </tr>
-      <tr v-for="(value, index) in props.tableStructure.data.value" :key="index">
+      <tr v-for="(value, index) in props.tableStructure.data.value" :key="index" :class="checkedIds.includes(value.id) ? 'checkbox-selected' : ''">
         <!-- # -->
         <td>
           <input :id="index + 1" class="checkbox-input" :value="value.id" v-model="checkedIds"  type="checkbox"  />
