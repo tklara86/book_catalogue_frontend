@@ -405,7 +405,7 @@ overflow: scroll;
   animation: slideInUp .2s ease-in forwards;
   z-index: 500;
   overflow: scroll;
-  top: 40px;
+
   
   }
 .custom-option {
@@ -908,9 +908,6 @@ tr {
   padding: 2px 0;
 }
 
-.tag-item:first-of-type {
-  margin-left: 5px;
-}
 .tag-item:not(:last-of-type) {
   margin-right: 5px;
 }
@@ -921,13 +918,20 @@ tr {
   color: #fff;
   display: flex;
   align-items: center;
-  font-size: 10px;
+  font-size: 12px;
+
 
 }
+
+.tag-item.none {
+  display: none;
+}
+
 
 .tag-item i {
   width: 15px;
   height: 15px;
+  cursor: pointer;
 }
 
 .multiple-select-inner input {
@@ -942,4 +946,15 @@ tr {
   border: none;
   box-shadow: none !important;
   background:#fbfbfb !important;
+}
+
+.input-control-multiple {
+  margin-bottom: 0;
+}
+
+.tags-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
 }

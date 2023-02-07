@@ -53,6 +53,8 @@
   let bookAuthorIds = {};
   let bookCategoryIds = {};
 
+  let categoryNames2 = ref({});
+
   onClickOutside(modal, () => (isModalOpen.value = false, runUpdate.value = false))
 
 
@@ -297,23 +299,21 @@
     for (var i = 0; i < categories.length; i++) {
       // add
       if (checkedCategory.value.includes(categories[i].id)) {
-        if (!categoryNames.value.includes(categories[i].name)) {
-          categoryNames.value.push(categories[i].name)
+        if (!categoryNames2.value[categories[i].id]) {
+          categoryNames2.value[categories[i].id] = categories[i].name
         }
       } 
       // remove
       if (!checkedCategory.value.includes(categories[i].id)) {
-        if (categoryNames.value.includes(categories[i].name)) {
-          categoryNames.value.splice(categoryNames.value.indexOf(categories[i].name), 1)
+        if (categoryNames2.value[categories[i].id]) {
+          delete categoryNames2.value[categories[i].id]
+      
         }
+      
       } 
     }
 
- 
 
-    // for (var j = 0; j < categoryNames.value.length; j++ ) {
-    //   console.log(categoryNames.value[j])
-    // }
   })
 
 
@@ -339,6 +339,13 @@
       responseMessage.value = '';
     }, 4000)
 } 
+
+const removeTag = (id) => {
+  checkedCategory.value.splice(checkedCategory.value.indexOf(parseInt(id)), 1)
+  delete categoryNames2.value[id]
+ 
+  
+}
 
 
 </script>
@@ -403,46 +410,14 @@
                       </div>
                     </div>
 
-     
-                   
-                 <!--  <label class="form-label" for="status">Categories</label>
-                    <div class="select mt-0 mb-0">
-                      <div @click="handleSelect" :class="selected ? 'custom-select selected' : 'custom-select'">
-                          <span :model="statusValue" class="value">{{statusValue}}</span>
-                          <vue-feather class="icon dropdown-icon" type="chevron-down"></vue-feather>
-                      </div>
-                      <div class="option">
-                        <div class="checkbox-container">
-                          <div v-if="categories">
-                            <div  v-for="category in categories" :key="'category_' + category.id">
-                              <input  class="checkbox-input" :id="'category_' + category.id" type="checkbox" :value="category.id" v-model="checkedCategory"  />
-                              <label class="checkbox" :for="'category_' + category.id">
-                                <span>
-                                  <svg width="12px" height="10px">
-                                    <use xlink:href="#check"></use>
-                                  </svg>
-                                </span>
-                                <span>{{category.name}}</span>
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-
-
-                      </div>
-                    </div>--> 
-                    {{checkedCategory}}
-                    {{categoryNames}}
-                    <label class="form-label" for="categories2">Categories2</label>
-                    
-                    <div class="multiple-select-wrapper">
-                      <div class="multiple-select-inner">
-                        <template v-for="categoryName in categoryNames">
-                            <span class="tag-item">{{categoryName}}<vue-feather class="icon dropdown-icon" type="x"></vue-feather></span>
+                  <label class="form-label" for="status">Categories</label>
+                      <div v-if="Object.keys(categoryNames2).length" class="tags-wrapper">
+                      <template v-for="(value, key) in categoryNames2">
+                          <span class="tag-item">{{value}}<vue-feather @click="removeTag(key)" class="icon dropdown-icon" type="x"></vue-feather></span>
                         </template>
-                       
-                        <input @click="dropdown = !dropdown" v-model="filterCategories" class="input-control input-control--small" type="text" name="categories2" placeholder="Categories2">
-                        <div  v-on-click-outside="dropdownHandler" :class="dropdown ? 'option show' : 'option'">
+                      </div>
+                        <input @click.stop ="dropdown = !dropdown" v-model="filterCategories" class="input-control input-control--small input-control-multiple" type="text" name="categories2" placeholder="Categories2">
+                        <div v-if="dropdown" v-on-click-outside.bubble="dropdownHandler" :class="dropdown ? 'option show' : 'option'">
                           <div class="checkbox-container">
                             <div v-if="categories">
                               <div v-for="category in categories" :key="'category_' + category.id">
@@ -464,10 +439,10 @@
 
 
                         </div>
-                      
-                      </div>            
-         
-                    </div>
+     
+                 
+                    
+            
 
 
                    
