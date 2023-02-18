@@ -59,6 +59,11 @@ const updateAccentColor = (e) => {
           <input type="radio" name="radio" value="blue" v-model="accentColor">
           <span class="checkmark"></span>
         </label>
+
+        <label @mouseenter="showTooltip" class="radio-container black" data-tooltip="black">
+          <input type="radio" name="radio" value="black" v-model="accentColor">
+          <span class="checkmark"></span>
+        </label>
      
         
       </div>
@@ -106,6 +111,10 @@ const updateAccentColor = (e) => {
   }
   .radio-container.blue .checkmark {
     background-color: #0040c1;
+  }
+
+  .radio-container.black .checkmark {
+    background-color: #272727;
   }
 
   .setting-header {
@@ -177,6 +186,8 @@ const updateAccentColor = (e) => {
 .radio-container.purpule .checkmark:after { border: 2px solid #7135bb; }
 .radio-container.green .checkmark:after { border: 2px solid #027a48; }
 .radio-container.blue .checkmark:after { border: 2px solid #0040c1; }
+
+.radio-container.black .checkmark:after { border: 2px solid #272727; }
 .radio-container .checkmark:after {
   top: -4px;
   left: -4px;

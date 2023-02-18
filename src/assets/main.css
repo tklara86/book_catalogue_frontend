@@ -777,7 +777,7 @@ tr {
   top: 3px;
   left: 2px;
   fill: none;
-  stroke: #fff;
+  stroke: #7d3dca;
   stroke-dasharray: 16px;
   stroke-dashoffset: 16px;
   transition: all 0.3s ease;
@@ -794,15 +794,15 @@ tr {
 }
 
 .checkbox-input:checked + .checkbox span:first-child {
-  background: #a153ff;
+  background: #f0e4ff;
   border-color: #7d3dca;
 
   animation: zoom-in-out 0.3s ease;
 }
 
 .checkbox-input:checked + .checkbox.checkbox-table span:first-child {
-  background: #2cb67d;
-  border-color: #2cb67d;
+  background: #f0e4ff;
+  border-color: #7d3dca;
 
   animation: zoom-in-out 0.3s ease;
 }
@@ -912,13 +912,14 @@ tr {
   margin-right: 5px;
 }
 .tag-item {
-  background:#8b51d2;
+  background:#f0e4ff;
   padding: 5px 7px;
   border-radius: 4px;
-  color: #fff;
+  color: #7521da;
   display: flex;
   align-items: center;
   font-size: 12px;
+  font-weight: 500;
 
 
 }
@@ -950,6 +951,7 @@ tr {
 
 .input-control-multiple {
   margin-bottom: 0;
+  /* margin-top: 2px; */
 }
 
 .tags-wrapper {
@@ -957,4 +959,8 @@ tr {
   flex-wrap: wrap;
   gap: 5px;
   padding: 5px;
+}
+
+.td-update {
+  cursor: pointer;
 }

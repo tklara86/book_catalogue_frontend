@@ -18,7 +18,6 @@
     status: null,
   })
 
-  const isHover = ref(false)
 
   // refs
   const isModalOpen = ref(false)
@@ -29,8 +28,6 @@
   const loadingTable = ref(true)
   const statusValue = ref("Select status");
   const selected = ref(false)
-  let b = ref(null)
-  let isOpenSelect = ref(null)
 
   const runUpdate = ref(false)
   const ctaButton = ref('');
@@ -38,13 +35,10 @@
   const bookId = ref(null)
 
   const filterCategories = ref([])
-
-  let categoryNames = ref([])
+  const  filterAuthors = ref([])
 
   const dropdown = ref(false)
-
-
-
+  const dropdownAuthors = ref(false)
 
 
 
@@ -53,18 +47,22 @@
   let bookAuthorIds = {};
   let bookCategoryIds = {};
 
-  let categoryNames2 = ref({});
+  let categoryNames = ref({});
+  let authorNames = ref({});
 
   onClickOutside(modal, () => (isModalOpen.value = false, runUpdate.value = false))
 
 
-  const dropdownHandler = () => {
+  const dropdownHandlerCategories = () => {
     dropdown.value = false
+  }
+  const dropdownHandlerAuthors = () => {
+    dropdownAuthors.value = false
   }
   
   // onMounted
   onMounted(async() => {
-
+ 
     const filters = {
       //authors: [57],
     //  categories: [23,45],
@@ -84,11 +82,6 @@
         bookAuthorIds[value.id] = value.authors;
       }   
       
-      // b.value = data.results.length;
-
-      // console.log(b.value)
-
-
       if (books.value) {
         loadingTable.value = false
       }
@@ -126,7 +119,6 @@
   watch(filterCategories, () => {
     let filteredName = filterCategories.value
     const regex = new RegExp(filteredName, "gi");
-    let catUpd = []
     for (var j  = 0; j < categories.length; j++) {
       let id = 'category_' + categories[j].id
       if (categories[j].name.match(regex)) {
@@ -143,13 +135,28 @@
    
   })
 
+  watch(filterAuthors, () => {
+    let filteredName = filterAuthors.value
+    const regex = new RegExp(filteredName, "gi");
+    for (var j  = 0; j < authors.length; j++) {
+      let id = 'author_' + authors[j].id
+      if (authors[j].author_name.match(regex)) {
+       
+        let labelId = document.querySelector(`label#${id}`)
+        labelId.style.display = 'flex';
+      
+      } else {
+        let labelId = document.querySelector(`label#${id}`)
+        labelId.style.display = 'none';
+      }
+    }
+
+   
+  })
 
 
 
-  const showSelectedCat = (e) => {
-    const option = e.target.nextElementSibling
-     option.classList.toggle('show');
-  }
+
 
 
   const handleSubmit = () => {
@@ -190,9 +197,6 @@
     
   }
 
-  const getCatName = (e) => {
-    console.log(e.target)
-  }
 
   const getStatus = (e) => {
     const selectedOption = e.target.closest('li');
@@ -299,14 +303,35 @@
     for (var i = 0; i < categories.length; i++) {
       // add
       if (checkedCategory.value.includes(categories[i].id)) {
-        if (!categoryNames2.value[categories[i].id]) {
-          categoryNames2.value[categories[i].id] = categories[i].name
+        if (!categoryNames.value[categories[i].id]) {
+          categoryNames.value[categories[i].id] = categories[i].name
         }
       } 
       // remove
       if (!checkedCategory.value.includes(categories[i].id)) {
-        if (categoryNames2.value[categories[i].id]) {
-          delete categoryNames2.value[categories[i].id]
+        if (categoryNames.value[categories[i].id]) {
+          delete categoryNames.value[categories[i].id]
+      
+        }
+      
+      } 
+    }
+
+
+  })
+
+  watch(checkedAuthors, () => {
+    for (var i = 0; i < authors.length; i++) {
+      // add
+      if (checkedAuthors.value.includes(authors[i].id)) {
+        if (!authorNames.value[authors[i].id]) {
+          authorNames.value[authors[i].id] = authors[i].author_name
+        }
+      } 
+      // remove
+      if (!checkedAuthors.value.includes(authors[i].id)) {
+        if (authorNames.value[authors[i].id]) {
+          delete authorNames.value[authors[i].id]
       
         }
       
@@ -340,10 +365,20 @@
     }, 4000)
 } 
 
-const removeTag = (id) => {
+const removeTag = (id, target) => {
+  switch (target){
+    case 'authors':
+      checkedAuthors.value.splice(checkedAuthors.value.indexOf(parseInt(id)), 1)
+      delete authorNames.value[id]
+      break;
+    case 'categories':
+      checkedCategory.value.splice(checkedCategory.value.indexOf(parseInt(id)), 1)
+      delete categoryNames.value[id]
+      break;
+
+  }
   checkedCategory.value.splice(checkedCategory.value.indexOf(parseInt(id)), 1)
-  delete categoryNames2.value[id]
- 
+  delete categoryNames.value[id]
   
 }
 
@@ -362,13 +397,14 @@ const removeTag = (id) => {
         <div class="modal-bg" v-if="isModalOpen">
           <div class="modal" ref="modal">
             <div class="modal-content">
-            <div class="modal-content-top">
-              <h3>Book</h3>
-              <div class="form-control">
+              <div class="modal-content-top">
+                <h3>Book</h3>
+                <div class="form-control">
+                    <!-- Title -->
                     <label class="form-label" for="title">Title</label>
                     <input v-model="bookCredentials.title" class="input-control input-control--small" type="text" name="title" placeholder="Title">
-
-                  <label class="form-label" for="status">Status</label>
+                    <!-- Status -->
+                    <label class="form-label" for="status">Status</label>
                     <div class="select mt-0 mb-0">
                       <div @click="handleSelect" :class="selected ? 'custom-select selected' : 'custom-select'">
                           <span :model="statusValue" class="value">{{statusValue}}</span>
@@ -382,19 +418,21 @@ const removeTag = (id) => {
                         </ul>
                       </div>
                     </div>
-
-                    <label class="form-label" for="status">Authors</label>
-                    <div class="select mt-0 mb-0">
-                      <div :class="selected ? 'custom-select selected' : 'custom-select'">
-                          <span :model="statusValue" class="value">{{statusValue}}</span>
-                          <vue-feather class="icon dropdown-icon" type="chevron-down"></vue-feather>
+                      <!-- Authors -->
+                      <label class="form-label" for="status">Authors</label>
+                      <div v-if="Object.keys(authorNames).length" class="tags-wrapper">
+                          <template v-for="(value, key) in authorNames">
+                              <span class="tag-item">{{value}}<vue-feather @click="removeTag(key, 'authors')" class="icon dropdown-icon" type="x"></vue-feather></span>
+                            </template>
                       </div>
-                     <div class="option">
+                      <input @click.stop ="dropdownAuthors = !dropdownAuthors" v-model="filterAuthors" class="input-control input-control--small input-control-multiple" type="text" name="authors" placeholder="Authors">
+                      <div v-if="dropdownAuthors" v-on-click-outside.bubble="dropdownHandlerAuthors" :class="dropdownAuthors ? 'option show' : 'option'">
                         <div class="checkbox-container">
                           <div v-if="authors">
                             <div v-for="author in authors" :key="'author_' + author.id">
-                              <input class="checkbox-input" :id="'author_' + author.id" type="checkbox" :value="author.id" v-model="checkedAuthors" />
-                              <label class="checkbox" :for="'author_' + author.id">
+                          
+                            <input :class="checkedAuthors.includes(author.id) ? 'checkbox-input selected' : 'checkbox-input'" :id="'author_' + author.id" type="checkbox" :value="author.id" v-model="checkedAuthors"  />
+                              <label :id="'author_' + author.id" class="checkbox" :for="'author_' + author.id">
                                 <span>
                                   <svg width="12px" height="10px">
                                     <use xlink:href="#check"></use>
@@ -405,24 +443,21 @@ const removeTag = (id) => {
                             </div>
                           </div>
                         </div>
-
-
                       </div>
-                    </div>
-
-                  <label class="form-label" for="status">Categories</label>
-                      <div v-if="Object.keys(categoryNames2).length" class="tags-wrapper">
-                      <template v-for="(value, key) in categoryNames2">
-                          <span class="tag-item">{{value}}<vue-feather @click="removeTag(key)" class="icon dropdown-icon" type="x"></vue-feather></span>
+                    
+                      <label class="form-label" for="status">Categories</label>
+                      <div v-if="Object.keys(categoryNames).length" class="tags-wrapper">
+                        <template v-for="(value, key) in categoryNames">
+                            <span class="tag-item">{{value}}<vue-feather @click="removeTag(key, 'categories')" class="icon dropdown-icon" type="x"></vue-feather></span>
                         </template>
                       </div>
-                        <input @click.stop ="dropdown = !dropdown" v-model="filterCategories" class="input-control input-control--small input-control-multiple" type="text" name="categories2" placeholder="Categories2">
-                        <div v-if="dropdown" v-on-click-outside.bubble="dropdownHandler" :class="dropdown ? 'option show' : 'option'">
+                        <input @click.stop ="dropdown = !dropdown" v-model="filterCategories" class="input-control input-control--small input-control-multiple" type="text" name="categories" placeholder="Categories">
+                        <div v-if="dropdown" v-on-click-outside.bubble="dropdownHandlerCategories" :class="dropdown ? 'option show' : 'option'">
                           <div class="checkbox-container">
                             <div v-if="categories">
                               <div v-for="category in categories" :key="'category_' + category.id">
                             
-                              <input :data-category-name="category.name" :class="checkedCategory.includes(category.id) ? 'checkbox-input selected' : 'checkbox-input'" :id="'category_' + category.id" type="checkbox" :value="category.id" v-model="checkedCategory"  />
+                              <input :class="checkedCategory.includes(category.id) ? 'checkbox-input selected' : 'checkbox-input'" :id="'category_' + category.id" type="checkbox" :value="category.id" v-model="checkedCategory"  />
                                 <label :id="'category_' + category.id" class="checkbox" :for="'category_' + category.id">
                                   <span>
                                     <svg width="12px" height="10px">
@@ -431,49 +466,46 @@ const removeTag = (id) => {
                                   </span>
                                   <span>{{category.name}}</span>
                                 </label>
-                      
-                              
                               </div>
                             </div>
                           </div>
-
-
                         </div>
-     
-                 
-                    
-            
-
-
-                   
-      
-
-
-
-                    <div>
-                      <svg class="checkbox-symbol">
-                          <symbol id="check" viewbox="0 0 12 10">
-                            <polyline
-                              points="1.5 6 4.5 9 10.5 1"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                            ></polyline>
-                          </symbol>
-                        </svg>
-
-
-                    </div>
-                </div>
-            </div>
-              
+                        <!-- SVG checkmark -->
+                        <div>
+                          <svg class="checkbox-symbol">
+                            <symbol id="check" viewbox="0 0 12 10">
+                              <polyline
+                                points="1.5 6 4.5 9 10.5 1"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                              ></polyline>
+                            </symbol>
+                          </svg>
+                        </div>
+                  </div> <!-- form control -->
+              </div> <!-- modal content top end -->
         
-
-                <template v-if="runUpdate">
-                  <div class="modal-buttons">
-                    <button class="cta-btn neutral" @click="isModalOpen = false">Cancel</button>
-                    <button class="cta-btn submit" @click="handleUpdate" :model="bookId">
-                    <vue-feather v-if="!loading" class="modal-heading--icon" type="edit"></vue-feather>
+              <template v-if="runUpdate">
+                <div class="modal-buttons">
+                  <button class="cta-btn neutral" @click="isModalOpen = false">Cancel</button>
+                  <button class="cta-btn submit" @click="handleUpdate" :model="bookId">
+                  <vue-feather v-if="!loading" class="modal-heading--icon" type="edit"></vue-feather>
+                  <span v-if="!loading">
+                    <template v-if="runUpdate ? ctaButton = 'Update Book' : ctaButton = 'Add new Book'">
+                      {{ctaButton}}
+                    </template>
+                  </span>
+                  <Spinner v-if="loading" text="Processing.."></Spinner>
+                </button>   
+                </div>
+              
+              </template>
+              <template v-else>
+                <div class="modal-buttons">
+                  <button class="cta-btn neutral" @click="isModalOpen = false">Cancel</button>
+                  <button class="cta-btn submit" @click="handleSubmit">
+                    <vue-feather v-if="!loading" class="modal-heading--icon" type="plus-square"></vue-feather>
                     <span v-if="!loading">
                       <template v-if="runUpdate ? ctaButton = 'Update Book' : ctaButton = 'Add new Book'">
                         {{ctaButton}}
@@ -481,26 +513,10 @@ const removeTag = (id) => {
                       
                     </span>
                     <Spinner v-if="loading" text="Processing.."></Spinner>
-                  </button>   
-                  </div>
-               
-                </template>
-                <template v-else>
-                  <div class="modal-buttons">
-                    <button class="cta-btn neutral" @click="isModalOpen = false">Cancel</button>
-                    <button class="cta-btn submit" @click="handleSubmit">
-                      <vue-feather v-if="!loading" class="modal-heading--icon" type="plus-square"></vue-feather>
-                      <span v-if="!loading">
-                        <template v-if="runUpdate ? ctaButton = 'Update Book' : ctaButton = 'Add new Book'">
-                          {{ctaButton}}
-                        </template>
-                        
-                      </span>
-                      <Spinner v-if="loading" text="Processing.."></Spinner>
-                  </button> 
-                  </div>
-          
-                </template>
+                </button> 
+                </div>
+        
+              </template>
 
                 <Transition name="alert">
                   <div v-if="responseMessage" :class="errors ? 'alert-message alert-message--danger' : 'alert-message alert-message--success'">
@@ -511,8 +527,8 @@ const removeTag = (id) => {
                     <vue-feather @click="responseMessage=false" class="alert-close" type="x"></vue-feather>
                   </div>
                 </Transition>
-              </div>
-          </div>
+            </div> <!-- modal content -->
+          </div> <!-- modal end -->
         </div>
       </Transition>
     </Teleport>

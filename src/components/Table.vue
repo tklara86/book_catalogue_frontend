@@ -9,7 +9,6 @@
 
   const emit = defineEmits(['delete', 'update',])
 
-
   watch(checkedIds, () => {
     let ids = [];
     for (let value in props.tableStructure.data.value) {
@@ -70,7 +69,7 @@
           </label>
           </td>
         <!-- Rest of the fields -->
-        <td v-for="(field, index) in props.tableStructure.fields" :key="index">
+        <td class="td-update" @click="$emit('update', value.id)" v-for="(field, index) in props.tableStructure.fields" :key="index">
             <!-- check for fields as array  -->
             <span v-if="(typeof value[field] === 'object')" v-for="(val, index) in value[field]" :key="index">
               <template v-if="props.tableStructure.sub_fields" v-for="(sub_field, index) in props.tableStructure.sub_fields" :key="index">
@@ -81,9 +80,6 @@
                 {{ value[field] }}
             </span>
         </td>
-        <div class="action-btn-wrapper">
-          <button @click="$emit('update', value.id)" class="action-btn"><vue-feather class="icon" type="edit"></vue-feather></button>
-        </div>
       </tr>
     </table>
     <div class="pagination">
