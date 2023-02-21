@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+</head>
+<body>
+  <section>
+      <div class="sticky">
+        <div class="container">
+          <h1>Yitle website</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat modi ab pariatur magnam placeat et, velit magni nobis exercitationem qui odit, excepturi necessitatibus. Veniam recusandae ipsa quisquam consequuntur temporibus illum, harum quod quo atque dolores? Esse veritatis deserunt voluptates reprehenderit!</p>
+        </div>
+      </div>
+  </section>
+  
+  <section>
+      <div class="sticky">
+        <div class="container">
+          <h1>Projects</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat modi ab pariatur magnam placeat et, velit magni nobis exercitationem qui odit, excepturi necessitatibus. Veniam recusandae ipsa quisquam consequuntur temporibus illum, harum quod quo atque dolores? Esse veritatis deserunt voluptates reprehenderit!</p>
+        </div>
+      </div>
+  </section>
+
+  <section>
+    <div class="sticky">
+      <div class="container">
+        <h1>Content</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat modi ab pariatur magnam placeat et, velit magni nobis exercitationem qui odit, excepturi necessitatibus. Veniam recusandae ipsa quisquam consequuntur temporibus illum, harum quod quo atque dolores? Esse veritatis deserunt voluptates reprehenderit!</p>
+      </div>
+    </div>
+  </section>
+
+
+    
+
+</body>
+</html>
+
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #1a1a1a;
+  
+  }
+  
+  html,
+  body {
+    background-color: #000;
+    height: 300vh;
+  }
+  
+  section {
+    position: relative;
+    height:200vh;
+    width: 100%;
+  }
+  
+  section:nth-child(2) {
+    top: -100vh;
+  }
+  section:nth-child(3) {
+    top: -200vh;
+    height: 100vh;
+  }
+  
+  
+  .sticky {
+    position: sticky;
+    width: 100%;
+    height: 100vh;
+    top: 10px;
+    padding: 2rem;
+    will-change: filter, transform;
+  }
+  
+  .container {
+    width: 100%;
+    height: 100%;
+    background-color: #e2e2e2;
+    border-radius: 10px;
+    padding: 1rem;
+    
+  }
+  
+</style>
+
+<script>
+
+  let stikcySections = [...document.querySelectorAll('.sticky')];
+
+  function animate() {
+    for (let i = 0; i < stikcySections.length; i++) {
+      let { top } = stikcySections[i].parentElement.getBoundingClientRect();
+      let transTop = top > 0 ? 0 : top * -1;
+      if (transTop >= 1000) transTop = 1000 
+  
+      if (top <= 0 && i !== stikcySections.length) {
+        stikcySections[i].style.filter = `blur(${0 + (transTop * .05)}px)`
+        stikcySections[i].style.transform = `scale3d(${1- (transTop * 0.001)}, ${1 - (transTop * 0.001)}, 1)`
+        stikcySections[i].style.opacity = 1 - (transTop * 0.0015)
+  
+      }
+    }
+    requestAnimationFrame(animate)
+  }
+  
+  animate();
+</script>
