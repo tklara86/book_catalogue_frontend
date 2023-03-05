@@ -155,10 +155,6 @@
   })
 
 
-
-
-
-
   const handleSubmit = () => {
 
     let authorIds = [];

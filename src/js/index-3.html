@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <main>
+     
+        <div class="slider-range-wrapper">
+            <div class="slider-range-wrapper-inner">
+                <div class="slider-range-head">
+                    <object type="image/svg+xml" data="layout-2.svg" class="logo"></object>
+                    <p>Size</p>
+                </div>
+                <input type="range" min="3" max="6" value="4" id="update-layout">
+            </div>
+        
+        </div>
+        
+        <div class="container"></div>
+    </main>
+    
+    <script src="app.js"></script>
+    
+</body>
+</html>
+
+
+<style>
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+    /* font-weight: 400; */
+  
+  }
+  
+  html,
+  body {
+    overflow: hidden;
+    background-color: rgb(34, 34, 34);
+    color: #fff;
+  }
+  
+  main {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    /* background-color: red; */
+  }
+  
+  
+  input {
+    z-index: 12;
+    color: black;
+  }
+  
+  .container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    padding: 20px 2vw;
+  }
+  
+  .column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .post {
+    position: relative;
+    overflow: hidden;
+    /* background: #131313; */
+  }
+  
+  img {
+    width: 100%;
+  
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #161616;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: 0.5s;
+    display: none;
+  }
+  
+  .post:hover .overlay {
+    opacity: 0.95;
+    cursor: pointer;
+  }
+  
+  
+  
+  
+  /********** Range Input Styles **********/
+  /*Range Reset*/
+  input[type="range"] {
+    -webkit-appearance: none;
+     appearance: none;
+     background: transparent;
+     cursor: pointer;
+  }
+  
+  /* Removes default focus */
+  input[type="range"]:focus {
+   outline: none;
+  }
+  
+  /***** Chrome, Safari, Opera and Edge Chromium styles *****/
+  /* slider track */
+  input[type="range"]::-webkit-slider-runnable-track {
+    background-color: #053a5f;
+    border-radius:0.5em;
+    height: 2px;
+  }
+  
+  /* slider thumb */
+  input[type="range"]::-webkit-slider-thumb {
+   -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    margin-top: -9px;
+    border-radius: 50%;
+  
+    /*custom styles*/
+    background-color: #5cd5eb;
+    height: 20px;
+    width: 20px;
+  }
+  
+  
+  
+  
+  /******** Firefox styles ********/
+  /* slider track */
+  input[type="range"]::-moz-range-track {
+    background-color: #053a5f;
+    border-radius: 0.5rem;
+    height: 2px;
+  }
+  
+  /* slider thumb */
+  input[type="range"]::-moz-range-thumb {
+    border: none; /*Removes extra border that FF applies*/
+    border-radius: 0; /*Removes default border-radius that FF applies*/
+    margin-top: -5px;
+    border-radius: 50%;
+    /*custom styles*/
+    background-color: #fefef6;
+    height: 20px;
+    width: 20px;
+  }
+  /* 
+  input[type="range"]:focus::-moz-range-thumb {
+   border: 1px solid #053a5f;
+   outline: 3px solid #053a5f;
+   outline-offset: 0.125rem; 
+  } */
+  
+  
+  #layout-icon {
+    background-image: url('layout-2.svg');
+    width: 50px;
+    height: 20px;
+    background-repeat: no-repeat;
+  
+    background-position: center;
+  }
+  
+  object.logo {
+    width: 25px;
+    height: 25px;
+  }
+  
+  object.logo svg {
+    fill: transparent;
+    stroke: red;
+  }
+  
+  
+  .slider-range-head {
+    display: flex;
+    align-items: center;
+  }
+  .slider-range-wrapper-inner {
+    display: flex;
+    gap: 10px;
+    justify-items: flex-start;
+    align-items: center;
+  }
+  
+  .slider-range-head p {
+    margin-left: 5px;
+  }
+  
+  
+  .slider-range-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-end;
+    padding:50px 2vw 0 0;
+  }
+</style>
+
+
+
+<script>
+
+
+const posts = []
+
+const images = [
+    'fujita-stories-front.jpg',
+    'orff-carmina-burana-front.jpg',
+    'penderecki-cherry-actions-front.jpg',
+    'stockhausen-mantra-front.jpg',
+    'pexels-1.jpg',
+    'pexels-2.jpg',
+    'pexels-3.jpg',
+
+]
+
+let imageIndex = 0;
+
+for(let i = 1; i <= 43; i++){
+    let item = {
+        id: i,
+        title: `Post ${i}`,
+        date: `${i < 10 ? 0 : ''}${i}/10/2021 `,
+        image: images[imageIndex]
+    }
+    posts.push(item);
+    imageIndex++;
+    if (imageIndex > images.length - 1) imageIndex = 0;
+}
+
+
+
+
+const container = document.querySelector('.container');
+
+function generateMasonryGrid(columns, posts){
+
+    container.innerHTML = '';
+    
+    let columnWrappers = {};
+
+    for(let i = 0; i < columns; i++){
+        columnWrappers[`column${i}`] = [];
+    }
+
+
+    for(let i = 0; i < posts.length; i++){
+        const column = i % columns;
+    
+        columnWrappers[`column${column}`].push(posts[i]);
+    }
+
+    for(let i = 0; i < columns; i++){
+        let columnPosts = columnWrappers[`column${i}`];
+        let div = document.createElement('div');
+        div.classList.add('column');
+
+        columnPosts.forEach(post => {
+            let postDiv = document.createElement('div');
+            postDiv.classList.add('post');
+            let image = document.createElement('img');
+            image.src = post.image;
+            let hoverDiv = document.createElement('div');
+            hoverDiv.classList.add('overlay');
+            let title = document.createElement('h3');
+            title.innerText = post.title;
+            hoverDiv.appendChild(title);
+    
+            
+            postDiv.append(image, hoverDiv)
+            div.appendChild(postDiv) 
+        });
+        container.appendChild(div);
+    }
+}
+
+let previousScreenSize = window.innerWidth;
+
+window.addEventListener('resize', () => {
+    imageIndex = 0;
+    if(window.innerWidth < 600 && previousScreenSize >= 600){
+        generateMasonryGrid(1, posts);
+    }else if(window.innerWidth >= 600 && window.innerWidth < 1000 && (previousScreenSize < 600 || previousScreenSize >= 1000)){
+        generateMasonryGrid(2, posts);
+
+    }else if(window.innerWidth >= 1000 && previousScreenSize < 1000){
+        generateMasonryGrid(4, posts)
+    }
+    previousScreenSize = window.innerWidth;
+
+})
+
+if(previousScreenSize < 600){
+    generateMasonryGrid(1, posts)
+}else if(previousScreenSize >= 600 && previousScreenSize < 1000){
+    generateMasonryGrid(2, posts)
+}else{
+
+const updateLayout = document.querySelector('#update-layout');
+    generateMasonryGrid(updateLayout.value, posts)
+}
+
+
+const updateLayout = document.querySelector('#update-layout');
+
+updateLayout.addEventListener('change', function(e) {
+    generateMasonryGrid(parseInt(e.target.value), posts)
+})
+
+</script>
