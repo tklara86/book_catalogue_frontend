@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+            color: rgb(255, 255, 255);
+          }
+          
+          body {
+            background: linear-gradient(#161616, #000000);
+            height: 100%;
+            width: 100%;
+          }
+          
+          html {
+            background: #161616;
+          }
+          section {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+          }
+          .img-wrap {
+            position: relative;
+            top: 40%;
+            height: 40%;
+            width: 1px;
+            overflow: hidden;
+            opacity: 0;
+          }
+          
+          .img-wrap.active {
+            width: 40vw;
+            opacity: 1;
+            transition: opacity 0s, width 2s;
+          }
+          
+          .img-wrap.active > .img {
+            transform: scale(1);
+            transition: 1s ease-out;
+          }
+          .img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40vw;
+            height: 100%;
+            background-color: black;
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.6);
+            filter: grayscale(100%);
+          }
+          
+          h2 {
+            position: absolute;
+            opacity: 0;
+            top: 70%;
+            z-index: 2;
+            letter-spacing: 2px;
+            transition: 0.2s;
+          }
+          h2.active {
+            opacity: 1;
+            transition: opacity 1s;
+          }
+    </style>
+</head>
+<body>
+
+    <section>
+    
+            <h2>Mercedes-Benz</h2>
+        
+        <div class="img-wrap">
+            <div class="img"></div>
+        </div>
+    </section>
+    <section>
+        <h2>AMG Power</h2>
+        <div class="img-wrap">
+            <div class="img"></div>
+        </div>
+    </section>
+    <section>
+        <h2>Modern Luxury</h2>
+        <div class="img-wrap">
+            <div class="img"></div>
+        </div>
+    </section>
+    <section>
+        <h2>Pioneering Innovation</h2>
+        <div class="img-wrap">
+            <div class="img"></div>
+        </div>
+    </section>
+    <section>
+        <h2>Superior Perfomance</h2>
+        <div class="img-wrap">
+            <div class="img"></div>
+        </div>
+    </section>
+    <section>
+        <h2></h2>
+    </section>
+
+    <script src="app.js"></script>
+    
+</body>
+</html>
+
+
+
+<script>
+    let imageItems = [...document.querySelectorAll('.img-wrap')]
+let titles = [...document.querySelectorAll('h2')];
+
+let options = {
+  rootMargin: '0px',
+  threshold: .2   //20%
+}
+
+let setItemActive = (entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+    }
+  })
+})
+
+
+let observer = new IntersectionObserver(setItemActive, options)
+
+imageItems.forEach((item, index) => {
+  item.children[0].style.backgroundImage = `url(./images/${index+1}.jpeg)`
+  index % 2 == 0 ? item.style.left = '55%' : item.style.left = '5%';
+  observer.observe(item)
+})
+
+titles.forEach((title, index) => {
+  index % 2 == 0 ? title.style.left = '45%' : title.style.left = '35%';
+  observer.observe(title)
+})
+
+
+</script>
