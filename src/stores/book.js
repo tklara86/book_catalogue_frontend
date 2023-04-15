@@ -43,7 +43,7 @@ export const useBookStore = defineStore('books', () => {
       return responseMessage.value = "Please select status"
     }
 
-    postData('http://localhost:4000/v1/book', {title: credentials.title, status: credentials.status, status_id: credentials.status, categories: data, authors: authors})
+    postData('http://localhost:5200/v1/book', {title: credentials.title, status: credentials.status, status_id: credentials.status, categories: data, authors: authors})
     .then((data) => {
       let errorMsg = '';
       if (data.error) {
@@ -91,7 +91,7 @@ export const useBookStore = defineStore('books', () => {
     }
 
 
-    fetch(`http://localhost:4000/v1/books/${id}`, {
+    fetch(`http://localhost:5200/v1/books/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ id, title, status, updated_categories, updated_authors }),
       })

@@ -38,7 +38,7 @@ export const useAuthorStore = defineStore('authors', () => {
 
 
 
-    postData('http://localhost:4000/v1/author', {first_name: firstName, last_name: lastName, description: description})
+    postData('http://localhost:5200/v1/author', {first_name: firstName, last_name: lastName, description: description})
     .then((data) => {
       let errorMsg = '';
       if (data.error) {
@@ -77,7 +77,7 @@ export const useAuthorStore = defineStore('authors', () => {
       return responseMessage.value = "Last name cannot be empty"
     }
 
-    fetch(`http://localhost:4000/v1/authors/${id}`, {
+    fetch(`http://localhost:5200/v1/authors/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ id, first_name, last_name, description }),
       })

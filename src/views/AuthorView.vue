@@ -30,7 +30,7 @@ onClickOutside(modal, () => (isModalOpen.value = false, runUpdate.value = false,
 
 // onMounted
 onMounted(async() => {
-  await fetch('http://localhost:4000/v1/authors')
+  await fetch('http://localhost:5200/v1/authors')
     .then(response => response.json())
     .then(data => {
     
@@ -45,7 +45,7 @@ onMounted(async() => {
 
 watch(submitted, () => {
   if (submitted.value) {
-    fetch('http://localhost:4000/v1/authors')
+    fetch('http://localhost:5200/v1/authors')
       .then(response => response.json())
       .then(data => {
      
@@ -111,7 +111,7 @@ const deleteAuthor = (ids) => {
     })
     .then(response => response.json())
     .then(() => {
-      fetch('http://localhost:4000/v1/authors')
+      fetch('http://localhost:5200/v1/authors')
       .then(response => response.json())
       .then(data => {
         authors.value = data.results
@@ -126,7 +126,7 @@ const updateAuthor = (id) => {
  runUpdate.value = true;
  authorId.value = id;
 
- fetch(`http://localhost:4000/v1/authors/${id}`)
+ fetch(`http://localhost:5200/v1/authors/${id}`)
   .then(response => response.json())
   .then(data => {
     authorCredentials.firstName = data.author.first_name

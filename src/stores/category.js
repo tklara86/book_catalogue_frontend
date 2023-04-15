@@ -30,7 +30,7 @@ export const useCategoryStore = defineStore('categories', () => {
       return responseMessage.value = "Category name is required"
     }
 
-    postData('http://localhost:4000/v1/category', {name: name})
+    postData('http://localhost:5200/v1/category', {name: name})
     .then((data) => {
       let errorMsg = '';
       if (data.error) {
@@ -62,7 +62,7 @@ export const useCategoryStore = defineStore('categories', () => {
       return responseMessage.value = "Category name cannot be empty"
     }
 
-    fetch(`http://localhost:4000/v1/categories/${id}`, {
+    fetch(`http://localhost:5200/v1/categories/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ id, name }),
       })

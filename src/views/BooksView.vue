@@ -69,7 +69,7 @@
       status_id: ''
     }
     
-    await fetch('http://localhost:4000/v1/books?' + new URLSearchParams(filters))
+    await fetch('http://localhost:5200/v1/books?' + new URLSearchParams(filters))
     .then(response => response.json())
     .then(data => {
 
@@ -87,14 +87,14 @@
       }
     });
     // get cartegories
-    fetch('http://localhost:4000/v1/categories')
+    fetch('http://localhost:5200/v1/categories')
       .then(response => response.json())
       .then(data => {
         categories = data.results
     })
 
     // get authors
-    await fetch('http://localhost:4000/v1/authors')
+    await fetch('http://localhost:5200/v1/authors')
       .then(response => response.json())
       .then(data => {
         authors = data.results
@@ -105,7 +105,7 @@
   // onWatch
   watch(submitted, () => {
       if (submitted.value) {
-        fetch('http://localhost:4000/v1/books')
+        fetch('http://localhost:5200/v1/books')
           .then(response => response.json())
           .then(data => {
 
@@ -255,13 +255,13 @@
 
   const deleteBook = (ids) => {
     const data = { ids }
-   fetch(`http://localhost:4000/v1/books`, {
+   fetch(`http://localhost:5200/v1/books`, {
       method: 'POST',
       body: JSON.stringify(data)
      })
       .then(response => response.json())
       .then(() => {
-        fetch('http://localhost:4000/v1/books')
+        fetch('http://localhost:5200/v1/books')
           .then(response => response.json())
           .then(data => {
             books.value = data.results
@@ -275,7 +275,7 @@
     runUpdate.value = true
     bookId.value = id
     
-    fetch(`http://localhost:4000/v1/books/${id}`)
+    fetch(`http://localhost:5200/v1/books/${id}`)
         .then(response => response.json())
         .then(data => {
           

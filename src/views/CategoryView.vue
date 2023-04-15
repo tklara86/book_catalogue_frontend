@@ -34,7 +34,7 @@ onClickOutside(modal, () => (isModalOpen.value = false, runUpdate.value = false,
 
 // onMounted
 onMounted(async() => {
-  await fetch('http://localhost:4000/v1/categories')
+  await fetch('http://localhost:5200/v1/categories')
     .then(response => response.json())
     .then(data => {
       categories.value = data.results
@@ -45,7 +45,7 @@ onMounted(async() => {
 // watch
 watch(submitted, () => {
   if (submitted.value) {
-    fetch('http://localhost:4000/v1/categories')
+    fetch('http://localhost:5200/v1/categories')
       .then(response => response.json())
       .then(data => {
         categories.value = data.results
@@ -104,14 +104,14 @@ const handleSubmit = () => {
 
 const deleteCategory = (ids) => {
   const data = { ids }
-  fetch(`http://localhost:4000/v1/categories`, {
+  fetch(`http://localhost:5200/v1/categories`, {
     method: 'DELETE',
     body: JSON.stringify(data)
     })
     .then(response => response.json())
     .then(() => {
       
-      fetch('http://localhost:4000/v1/categories')
+      fetch('http://localhost:5200/v1/categories')
         .then(response => response.json())
         .then(data => {
           categories.value = data.results
@@ -125,7 +125,7 @@ const updateCategory = (id) => {
  isModalOpen.value = true;
  runUpdate.value = true;
  categoryId.value = id;
- fetch(`http://localhost:4000/v1/categories/${id}`)
+ fetch(`http://localhost:5200/v1/categories/${id}`)
   .then(response => response.json())
   .then(data => {
     categoryCredentials.name = data.category.name
