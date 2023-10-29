@@ -33,7 +33,7 @@ export const useBookStore = defineStore('books', () => {
       loading.value = false
       errors.value = true
   
-      return responseMessage.value = "Please select at least category"
+      return responseMessage.value = "Please select at least 1 category"
     }
 
     if (status <= 0) {
@@ -43,7 +43,21 @@ export const useBookStore = defineStore('books', () => {
       return responseMessage.value = "Please select status"
     }
 
-    postData('http://localhost:5200/v1/book', {title: credentials.title, status: credentials.status, status_id: credentials.status, categories: data, authors: authors})
+
+
+    postData('http://localhost:5200/v1/book', {
+      title: credentials.title, 
+      subtitle: credentials.subtitle, 
+      description: credentials.description, 
+      image: credentials.image,
+      isbn: credentials.isbn,
+      published_date: credentials.published_date,
+      page_count: credentials.page_count,
+      status: credentials.status, 
+      status_id: credentials.status, 
+      categories: data, 
+      authors: authors
+    })
     .then((data) => {
       let errorMsg = '';
       if (data.error) {

@@ -15,6 +15,12 @@
 
   const bookCredentials = reactive({
     title: "",
+    subtitle: "",
+    description: "",
+    image: "",
+    page_count: "",
+    published_date: "",
+    isbn: "",
     status: null,
   })
 
@@ -28,6 +34,8 @@
   const loadingTable = ref(true)
   const statusValue = ref("Select status");
   const selected = ref(false)
+
+  const isbnValue = ref('');
 
   const runUpdate = ref(false)
   const ctaButton = ref('');
@@ -154,6 +162,46 @@
    
   })
 
+  const handleISBNSearch = () => {
+    let bookObj = {};
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbnValue.value}`)
+      .then(reponse => reponse.json())
+      .then(data => {
+          const book = data.items[0];
+          if (data.items[0].volumeInfo.categories) {
+            bookObj.categories = [...data.items[0].volumeInfo.categories].toString();
+          }
+          
+          fetch(book.selfLink)
+            .then(res => res.json())
+            .then(json => {
+                bookObj.title =  json.volumeInfo.title || '';
+                bookObj.subtitle =  json.volumeInfo.subtitle || '';
+                bookObj.description = json.volumeInfo.description || '';
+                if (json.volumeInfo.imageLinks) {
+                  bookObj.image = json.volumeInfo.imageLinks.thumbnail || '';
+                } else {
+                  bookObj.image = '';
+                }
+                bookObj.page_count = json.volumeInfo.pageCount || '';
+                bookObj.publisher = json.volumeInfo.publisher || '';
+                bookObj.authors = [...json.volumeInfo.authors].toString() || '';
+                bookObj.published_date = json.volumeInfo.publishedDate || '';
+                bookObj.isbn = isbnValue.value;
+
+
+                bookCredentials.title = bookObj.title;
+                bookCredentials.subtitle = bookObj.subtitle;
+                bookCredentials.description = bookObj.description;
+                bookCredentials.page_count = bookObj.page_count;
+                bookCredentials.image = bookObj.image;
+                bookCredentials.isbn = bookObj.isbn;
+                bookCredentials.published_date = bookObj.published_date;
+    
+            });
+      })
+  }
+
 
   const handleSubmit = () => {
 
@@ -219,13 +267,16 @@
   // table structure
   const tStructure = {
     tHeadings: [
-   
       {
         id: 2,
-        name: "Title"
+        name: "Image"
       },
       {
         id: 3,
+        name: "Title"
+      },
+      {
+        id: 4,
         name: "Author"
       },
       {
@@ -246,7 +297,7 @@
       },
     ],
     data: books,
-    fields: ['title', 'book_authors', 'book_categories', 'status_name', 'date_added', 'date_updated'], // from json response
+    fields: ['image', 'title', 'book_authors', 'book_categories', 'status_name', 'date_added', 'date_updated'], // from json response
     sub_fields: ['author_name', 'name'], // json response
     loading: loadingTable
   }
@@ -394,6 +445,12 @@ const removeTag = (id, target) => {
           <div class="modal" ref="modal">
             <div class="modal-content">
               <div class="modal-content-top">
+                <div class="form-control">
+                  <!-- ISBN -->
+                  <label class="form-label" for="search-isbn">ISBN</label>
+                  <input v-model="isbnValue"  class="input-control input-control--small" type="text" name="search-isbn" placeholder="ISBN">
+                  <button class="cta-btn" @click="handleISBNSearch" >Search</button>
+                </div>
                 <h3>Book</h3>
                 <div class="form-control">
                     <!-- Title -->

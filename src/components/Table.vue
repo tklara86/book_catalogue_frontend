@@ -76,8 +76,10 @@
                 {{ val[sub_field] }}
               </template>
             </span>
-            <span :class="field === 'status_name' ? 'status status--' + value['status_id'] : ''" v-else>
+            <img class="table-thumbnail" v-else-if="field === 'image'" :src="value[field]">
+            <span :class="field === 'status_name' ? 'status status--' + value['status_id'] : 'table-title'" v-else>
                 {{ value[field] }}
+                <span class="table-subtitle" v-if="field === 'title'">{{value['subtitle']}}</span>
             </span>
         </td>
       </tr>

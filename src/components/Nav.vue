@@ -39,11 +39,12 @@
   }
   .nav-container {
 
-    padding: 20px;
+    padding: 50px;
 
     background: #f7f7f7;
     border-right: 1px solid #eee;
-    min-width: 200px
+    min-width: 200px;
+    min-height: 100vh;
   }
 
   .linkClass  a {
@@ -98,10 +99,10 @@
   }
 
   .linkClass a:not(:last-of-type) {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
   }
   .linkClass a.sub-link {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
   .linkClass a.sub-link:last-of-type {
     margin-bottom: 10px;

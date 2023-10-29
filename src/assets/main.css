@@ -779,7 +779,7 @@ tr {
   fill: none;
   stroke: #7d3dca;
   stroke-dasharray: 16px;
-  stroke-dashoffset: 16px;
+  stroke-dashoffset:16px;
   transition: all 0.3s ease;
   transform: translate3d(0, 0, 0);
 }
@@ -963,4 +963,17 @@ tr {
 
 .td-update {
   cursor: pointer;
+}
+
+img.table-thumbnail {
+  width: 80px;
+}
+
+.table-subtitle {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.table-title {
+  font-weight: 600;
 }
