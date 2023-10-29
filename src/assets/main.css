@@ -966,7 +966,7 @@ tr {
 }
 
 img.table-thumbnail {
-  width: 80px;
+  width: 60px;
 }
 
 .table-subtitle {
@@ -976,4 +976,12 @@ img.table-thumbnail {
 
 .table-title {
   font-weight: 600;
+}
+
+main {
+  background: #fafafa;
+}
+
+table {
+  background: #fff;
 }

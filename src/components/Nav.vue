@@ -11,7 +11,7 @@
 <template>
   <div class="nav-container">
     <div class="logoClass">
-      <img src="@/assets/book-catalogue-logo.png" alt="book catalogue logo" />
+      <span id="logo"></span>
     </div>
     <div class="linkClass">
       <RouterLink to="/"><vue-feather class="navigation--icon" type="home"></vue-feather>Home</RouterLink>
@@ -41,7 +41,7 @@
 
     padding: 50px;
 
-    background: #f7f7f7;
+    background: #fff;
     border-right: 1px solid #eee;
     min-width: 200px;
     min-height: 100vh;
@@ -63,6 +63,19 @@
 
   .subLinkClass span .navigation--icon.open {
     margin-right: 0;
+  }
+
+  #logo {
+    display: block;
+    width: 150px;
+    height:60px;
+    -webkit-mask: url("../assets/book-catalogue-logo.svg");
+    mask: url("../assets/book-catalogue-logo.svg");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    background-color: #1a1a1a;
   }
 
   .logoClass img {
