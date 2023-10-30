@@ -41,7 +41,7 @@
 
     padding: 50px;
 
-    background: #fff;
+    background: #fafafa;
     border-right: 1px solid #eee;
     min-width: 200px;
     min-height: 100vh;

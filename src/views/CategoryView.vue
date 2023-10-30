@@ -37,8 +37,10 @@ onMounted(async() => {
   await fetch('http://localhost:5200/v1/categories')
     .then(response => response.json())
     .then(data => {
-      categories.value = data.results
-
+      const sortedItems = Object.values(data.results).sort((a, b) => {
+        return a['books_in_category'] - b['books_in_category'];
+      });
+      categories.value =   data.results; //sortedItems 
   });
 })
 
