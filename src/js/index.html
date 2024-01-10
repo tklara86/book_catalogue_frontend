@@ -316,6 +316,18 @@ function doGet() {
 }
 
 
+function onOpen(e) {
+  SpreadsheetApp.getUi()
+      .createMenu('My Menu')
+      .addItem('My menu item', 'opn')
+      .addSeparator()
+      .addSubMenu(SpreadsheetApp.getUi().createMenu('My sub-menu')
+          .addItem('One sub-menu item', 'mySecondFunction')
+          .addItem('Another sub-menu item', 'myThirdFunction'))
+      .addToUi();
+}
+
+
 function getData(formData) {
 
   const sheet = SpreadsheetApp.getActiveSpreadsheet()
@@ -332,6 +344,16 @@ function getData(formData) {
     ])
 }
 
+function opn() {
+
+    const html = `
+      <a id='url' target="_blank" href="https://script.google.com/macros/s/AKfycbwMytE3d2ZjvSGvL28fWnAvjjulkIYQkXqZ1bAFIJY/dev">Click here</a>
+
+    `; 
+  var htmlOutput = HtmlService.createHtmlOutput(html).setWidth( 250 ).setHeight( 300 );
+  SpreadsheetApp.getUi().showModalDialog( htmlOutput, `openUrl function in generic.gs is now opening a URL...` );
+}
+
 
 function getCategories_() {
   const sheet = SpreadsheetApp.getActiveSpreadsheet()
@@ -341,3 +363,4 @@ function getCategories_() {
 
   return categories;
 }
+
