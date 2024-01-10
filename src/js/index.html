@@ -201,5 +201,143 @@
     });
   });
 
+  
+
 
 </script>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <base target="_top">
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/current/metro.css">
+  </head>
+  <body>
+
+    <div class="container">
+        <h1>Web form</h1>
+        <div class="grid">
+          <div class="row">
+                <form id="contact-form">
+                  <div class="row"> 
+                    <div class="cell-6">
+                      <div class="form-group">
+                          <label>First Name</label>
+                          <input name="firstName" type="text" class="metro-input" placeholder="First Name"/>
+                      </div>
+                    </div>
+                    <div class="cell-6">
+                      <div class="form-group">
+                        <label>Last Name</label>
+                        <input name="lastName" type="text" class="metro-input" placeholder="Last Name"/>
+                      </div>
+                    </div>
+                  </div>
+                     <div class="row"> 
+                      <div class="cell-6">
+                        <label>Departments</label>
+                        <select name="department" data-role="select">
+                            <option selected>One</option>
+                            <option>Two</option>
+                            <option>Three</option>
+                            <option>Four</option>
+                        </select>
+                      </div>
+                      <div class="cell-6">
+                        <label>Category</label>
+                        <select name="category" data-role="select">
+                            <option selected>One</option>
+                            <? for (const category of categories) { ?>
+                              <option><?= category ?></option>
+                            <? } ?>
+                        </select>
+                      </div>
+
+                    </div>
+                    <div class="row">
+                      <div class="cell-12">
+                        <label>Notes</label>
+                         <textarea name="notes" data-role="textarea" data-auto-size="true" data-max-height="200"></textarea>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="cell-12">
+                          <input name="offers" type="checkbox" data-role="checkbox" data-caption="New offers"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <button class="button success">Submit data</button>
+                    </div>
+
+         
+                </form>
+
+            
+            </div>
+        </div>
+    </div>
+
+    <!-- Metro UI -->
+    <script src="https://cdn.metroui.org.ua/current/metro.js"></script>
+    <script>
+      const contactForm = document.querySelector('#contact-form');
+
+      contactForm.addEventListener("submit", submitData);
+
+
+      function submitData(e) {
+        e.preventDefault();
+
+        google.script.run.withSuccessHandler(() => {
+          contactForm.reset()
+        }).withFailureHandler(() => {
+
+        }).getData(this)
+      }
+
+    </script>
+
+  </body>
+</html>
+
+
+
+function doGet() {
+  const htmlService = HtmlService.createTemplateFromFile("index")
+  htmlService.categories = getCategories_()
+  const html = htmlService.evaluate().addMetaTag("viewport","width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+  return html
+}
+
+
+function getData(formData) {
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet()
+  const workSheet = sheet.getSheetByName('Info')
+
+  workSheet.appendRow(
+    [
+      formData.firstName, 
+      formData.lastName,
+      formData.department,
+      formData.category,
+      formData.notes,
+      formData.offers
+    ])
+}
+
+
+function getCategories_() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet()
+  const workSheet = sheet.getSheetByName('Settings')
+
+  const categories = workSheet.getRange("A2:A").getValues().filter(r => r[0] !== "").map(r => r[0])
+
+  return categories;
+}
