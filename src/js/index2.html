@@ -115,3 +115,68 @@
   
   animate();
 </script>
+
+
+
+
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$client = new \Google\Client();
+$client->setApplicationName("Google Sheets and PHP");
+$client->setScopes([\Google_Service_Sheets::SPREADSHEETS]);
+$client->setAuthConfig(__DIR__ . '/credentials.json');
+$service = new Google_Service_Sheets($client);
+$spreadsheetId = '1fqf_V52IebOB0xBTvdgErBJKUpo4VHHPbGpH6q5ou6I';
+
+$range = "congress"; // all rows
+$results = $service->spreadsheets_values->get($spreadsheetId, $range);
+try {
+    // $numRows = $result->getValues() != null ? count($result->getValues()) : 0;
+    // printf("%d rows retrieved.", $numRows);
+
+
+    $jsonString = json_encode($results, JSON_PRETTY_PRINT);
+
+    $_SESSION['results'] = $jsonString;
+
+    echo '<pre>';
+    echo  $jsonString;
+    echo '</pre>';
+
+} catch(Exception $e) {
+    echo 'Message: '  . $e->getMessage();
+}
+
+
+// append
+// try {
+//     $values = [
+//         ["Tomasz", "Klara 2", "", "4", "some note", "off"]
+//     ];
+
+//     $body  = new Google_Service_Sheets_ValueRange([
+//         'values' => $values
+//     ]);
+//     $params = [
+//         'valueInputOption' => "USER_ENTERED"
+//     ];
+//     $insert = [
+//         "insertDataOption" => "INSERT_ROWS"
+//     ];
+//     $result = $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params, $insert);
+
+
+//     for ($i = 0; $i < 3; $i++) {
+//         $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params, $insert);
+//     }
+    
+
+// } catch(Exception $e) {
+//     echo 'Message: '  . $e->getMessage();
+// }
+
+
+
+
