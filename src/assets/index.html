@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <main>
+
+        <div class="msnry-grid">
+            <!-- Filters -->
+            <div class="masonary-filters">
+                <div class="masonary-filters-wrapper">
+                    <div class="msnry-filter-header">
+                        <h3>Filters</h3> 
+                        <span class="msnry-filter-clear">Clear</span>
+                    </div>
+               
+                    <hr>
+                    <div class="checkbox-wrapper-15">
+                        <input class="inp-cbx" name="finish" id="finish" type="checkbox" style="display: none;"/>
+                        <label class="cbx" for="finish">
+                        <span>
+                            <svg width="12px" height="9px" viewbox="0 0 12 9">
+                            <polyline points="1 5 4 8 11 1"></polyline>
+                            </svg>
+                        </span>
+                        <span class="msnry-filter-name">Finish</span>
+                        <span class="msnry-filter-count">18</span>
+                        </label>
+    
+                        <input class="inp-cbx" name="door-style" id="door-style" type="checkbox" style="display: none;"/>
+                        <label class="cbx" for="door-style">
+                        <span>
+                            <svg width="12px" height="9px" viewbox="0 0 12 9">
+                            <polyline points="1 5 4 8 11 1"></polyline>
+                            </svg>
+                        </span>
+                        <span class="msnry-filter-name">Door Style</span>
+                        <span class="msnry-filter-count">12</span>
+                        </label>
+    
+                        <input class="inp-cbx" name="kitchen-style" id="kitchen-style" type="checkbox" style="display: none;"/>
+                        <label class="cbx" for="kitchen-style">
+                        <span>
+                            <svg width="12px" height="9px" viewbox="0 0 12 9">
+                            <polyline points="1 5 4 8 11 1"></polyline>
+                            </svg>
+                        </span>
+                        <span class="msnry-filter-name">Kitchen Style</span>
+                        <span class="msnry-filter-count">6</span>
+                        </label>
+                    </div>
+                </div>
+  
+            </div>
+            <!-- Masonry Layout -->
+            <div class="msnry-container">
+                <div data-filter="finish">
+                    <img src="./images/fujita-stories-front.jpg">
+                </div>
+                <div data-filter="finish">
+                    <img src="./images/orff-carmina-burana-front.jpg">
+                </div>
+                <div data-filter="door-style">
+                    <img src="./images/penderecki-cherry-actions-front.jpg">
+                </div>
+                <div data-filter="kitchen-style">
+                    <img src="./images/stockhausen-mantra-front.jpg">
+                </div>
+                <div data-filter="finish">
+                    <img src="./images/pexels-dids-3844788-2.jpg">
+                </div>
+                <div data-filter="door-style">
+                    <img src="./images/pexels-jill-burrow-5987164.jpg">
+                </div>
+                <div data-filter="kitchen-style,finish">
+                    <img src="./images/pexels-steve-johnson-4371628.jpg">
+                </div>
+                <div data-filter="finish,kitchen-style,door-style">
+                    <img src="./images/pexels-willian-santos-7443653.jpg">
+                </div>
+                <div data-filter="kitchen-style">
+                    <img src="./images/pexels-efe-ersoy-19748403.jpg">
+                </div>
+                <div data-filter="kitchen-style">
+                    <img src="./images/pexels-esra-korkmaz-18011894.jpg">
+                </div>
+            
+            </div>
+        </div>
+  
+    </main>
+    
+
+    <script src="app.js"></script>
+    
+</body>
+</html>
+
+
+
+
+  
+
+
+
+  
